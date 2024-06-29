@@ -1,90 +1,66 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import Keyboard from '../../utils/Keyboard';
 import TableComponent from './TableComponent';
 
 export default function DocumentScreen() {
   const route = useRoute();
-  const { filename } = route.params; // Ensure 'filename' is destructured correctly
+  const { filename } = route.params;
   const decodedFilename = decodeURIComponent(filename);
-  const [selectedSwar, setSelectedSwar] = useState([])
+  const [selectedSwar, setSelectedSwar] = useState(null);
 
-  const handleSwarPress = (swar)=>{
-    setSelectedSwar([...selectedSwar, swar]);
-    if(swar == 'x'){
-      selectedSwar.splice()
-    }
-    console.log(swar)
-  }
+  const handleSwarPress = (swar) => {
+    setSelectedSwar(swar);
+  };
 
   return (
-    <View style={style.container}>
-      <View style={style.headerContainer}>
-        <Text style={style.textStyle}>{decodedFilename}</Text>
+    <View style={styles.container}>
+      <View style={styles.headerContainer}>
+        <Text style={styles.textStyle}>{decodedFilename}</Text>
       </View>
-
-      <View style= {style.tableContainer}>
-      {/* <FlatList
-      data={selectedSwar}
-      horizontal
-      renderItem={({ item }) => <Text style={style.tableText}>{item}</Text>}
-          keyExtractor={(item, index) => index.toString()}
-      /> */}
-        <TableComponent/>
+      <View style={styles.tableContainer}>
+        <TableComponent selectedSwar={selectedSwar} setSelectedSwar={setSelectedSwar} />
       </View>
-      <View style={style.bottomContainer}>
-        <Keyboard onSwarPress={handleSwarPress}/>
-        {/* <View style={style.joyStick}>
-        </View> */}
+      <View style={styles.bottomContainer}>
+        <Keyboard onSwarPress={handleSwarPress} />
       </View>
     </View>
   );
 }
 
-const style = StyleSheet.create({
-  container:{
+const styles = StyleSheet.create({
+  container: {
     height: '100%',
     backgroundColor: 'white',
     flex: 1,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   headerContainer: {
     borderColor: 'black',
     borderWidth: 2,
     padding: 5,
-    marginTop: 20
+    marginTop: 20,
   },
   textStyle: {
-    fontSize: 20
+    fontSize: 20,
   },
-  tableContainer:{
+  tableContainer: {
     marginTop: 30,
     borderColor: 'black',
     borderWidth: 2,
     width: '95%',
     height: '50%',
     margin: 5,
-    overflow: 'hidden'
+    overflow: 'hidden',
   },
-  bottomContainer:{
+  bottomContainer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'space-around',
     width: '100%',
     height: '100%',
     marginTop: 40,
-    padding: 20
+    padding: 20,
   },
-  joyStick:{
-    width: '40%',
-    height: '40%',
-    borderColor: 'black',
-    borderWidth: 2
-  },
-  tableText:{
-    color: 'black',
-    fontSize: 20
-  }
-
-})
+});

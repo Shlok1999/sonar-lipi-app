@@ -1,14 +1,13 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { View, ScrollView, StyleSheet, Modal, TouchableWithoutFeedback, Button, TouchableOpacity, Text } from 'react-native';
-import { Table, TableWrapper, Row, Cell } from 'react-native-table-component';
+import { Table, TableWrapper, Cell } from 'react-native-table-component';
 import { GestureHandlerRootView, TapGestureHandler, State } from 'react-native-gesture-handler';
 
-const TableComponent = () => {
+const TableComponent = ({ selectedSwar, setSelectedSwar, insertSeparator }) => {
   const [tableData, setTableData] = useState([
     ['Dha', 'Dhin', 'Dhin', 'Dha', 'Dha', 'Dhin', 'Dhin', 'Dha', 'Dha', 'Tin', 'Tin', 'Ta', 'Ta', 'Dhin', 'Din', 'Dha'],
-    // Initial data rows here
+    // Add more initial data rows if needed
   ]);
-  
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [selectedCell, setSelectedCell] = useState({ rowIndex: null, colIndex: null });
   const doubleTapRef = useRef(null);
@@ -23,11 +22,22 @@ const TableComponent = () => {
     setSelectedCell({ rowIndex, colIndex });
   };
 
-  const handleCellChange = (text, rowIndex, cellIndex) => {
-    const newData = [...tableData];
-    newData[rowIndex][cellIndex] = text;
-    setTableData(newData);
-  };
+  useEffect(() => {
+    if (selectedSwar && selectedCell.rowIndex !== null && selectedCell.colIndex !== null) {
+      const newData = [...tableData];
+      newData[selectedCell.rowIndex][selectedCell.colIndex] += selectedSwar;
+      setTableData(newData);
+      setSelectedSwar(null); // Reset the selected swar after updating
+    }
+  }, [selectedSwar, selectedCell, tableData, setSelectedSwar]);
+
+  useEffect(() => {
+    if (insertSeparator && selectedCell.rowIndex !== null && selectedCell.colIndex !== null) {
+      const newData = [...tableData];
+      newData[selectedCell.rowIndex][selectedCell.colIndex] += ' ';
+      setTableData(newData);
+    }
+  }, [insertSeparator]);
 
   const addRow = () => {
     const newRow = new Array(tableData[0].length).fill('');
