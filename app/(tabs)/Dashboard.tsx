@@ -5,80 +5,84 @@ import {
   ScrollView,
   StyleSheet,
   TouchableOpacity,
-  Modal, Button, TextInput
+  Modal,
+  Button,
+  TextInput,
 } from "react-native";
 import { useRouter } from "expo-router";
-
+import { Picker } from '@react-native-picker/picker';
 import { Link } from "expo-router";
+import LinearGradient from 'react-native-linear-gradient';
+
 
 export default function Dashboard() {
-  const taals = ["Tintaal", "Jhaptaal", "Dadra", "Kaherwa"];
+  const taals = ["Tintaal"];
 
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedTaal, setSelectedTaal] = useState('');
   const [name, setName] = useState('');
-  const [desc,setDesc] = useState('');
+  const [desc, setDesc] = useState('');
   const router = useRouter();
 
-  const openModal = (taal: string) => {
-    setSelectedTaal(taal);
+  const openModal = () => {
     setModalVisible(true);
   };
 
-  const closeModal = ()=>{
-    setModalVisible(false)
-  }
+  const closeModal = () => {
+    setModalVisible(false);
+  };
 
   const handleSubmit = () => {
     setModalVisible(false);
     router.push({
       pathname: `./composition/${name}`,
-      params: {name, desc: desc}
-    })
+      params: { name, desc, selectedTaal }
+    });
   };
 
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-      <View style={style.container}>
-        <View style={style.upper_view}>
-          <View>
-            <Text>Create New File</Text>
-          </View>
-          <View style={style.create_file_container}>
-            {taals.map((taal: string, index: number) => (
-              <TouchableOpacity key={index} style={style.taal_container} onPress={()=>openModal(taal)}>
-                <Text>{taal}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </View>
-        <View style={style.lower_view}>
-          <Text style={style.text}>Recent Files</Text>
+      <View style={styles.container}>
+        <View style={styles.upper_view}>
+          <Text style={styles.text}>Recent Files</Text>
           <Link href={`/composition/${name}`}>
             <Text>Go to file</Text>
           </Link>
         </View>
-        <Modal 
-        animationType="slide"
-        transparent={true}
-        visible = {modalVisible}
-        onRequestClose={()=>{
-          setModalVisible(!modalVisible)
-        }}
+        <TouchableOpacity style={styles.floatingButton} onPress={openModal}>
+          <Text style={styles.floatingButtonText}>+</Text>
+        </TouchableOpacity>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            setModalVisible(!modalVisible);
+          }}
         >
-          <View style={style.modalOverlay}>
-            <View style={style.modalView}>
-              <Text style={style.modalText}>{selectedTaal}</Text>
-              <View style={style.formContainer}>
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalText}>Create New Composition</Text>
+              <View style={styles.formContainer}>
+                <Text>Select Taal:</Text>
+                <Picker
+                  selectedValue={selectedTaal}
+                  style={styles.picker}
+                  onValueChange={(itemValue, itemIndex) => setSelectedTaal(itemValue)}
+                >
+                  {taals.map((taal, index) => (
+                    <Picker.Item label={taal} value={taal} key={index} />
+                  ))}
+                </Picker>
                 <Text>Name:</Text>
                 <TextInput
-                  style={style.input}
+                  style={styles.input}
                   value={name}
                   onChangeText={setName}
                 />
                 <Text>Description:</Text>
                 <TextInput
-                  style={style.input}
+                  style={styles.input}
                   value={desc}
                   onChangeText={setDesc}
                 />
@@ -92,44 +96,37 @@ export default function Dashboard() {
   );
 }
 
-const style = StyleSheet.create({
-  text: {
-    fontSize: 30,
-  },
+const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
   upper_view: {
-    backgroundColor: "grey",
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "flex-start",
-    width: "100%",
-    paddingVertical: 20, // Adjusted to add space at the top and bottom
-  },
-  create_file_container: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center', // Centering the items
-    paddingHorizontal: 10,
-    width: "100%", // Ensuring it takes full width
-    marginTop: 20,
-    gap: 20
-  },
-  lower_view: {
     backgroundColor: "white",
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
     width: "100%",
+    paddingVertical: 20,
   },
-  taal_container: {
-    width: 150, // Fixed width
-    height: 210, // Fixed height to maintain A4 aspect ratio (approximately)
-    backgroundColor: "white",
-    margin: 10,
+  text: {
+    fontSize: 30,
+    marginBottom: 20,
+  },
+  floatingButton: {
+    position: 'absolute',
+    width: 60,
+    height: 60,
     alignItems: 'center',
     justifyContent: 'center',
+    right: 30,
+    bottom: 30,
+    backgroundColor: 'blue',
+    borderRadius: 30,
+    elevation: 8,
+  },
+  floatingButtonText: {
+    color: 'white',
+    fontSize: 30,
   },
   modalOverlay: {
     flex: 1,
@@ -158,6 +155,11 @@ const style = StyleSheet.create({
   },
   formContainer: {
     width: "100%",
+  },
+  picker: {
+    height: 50,
+    width: "100%",
+    marginBottom: 10,
   },
   input: {
     height: 40,

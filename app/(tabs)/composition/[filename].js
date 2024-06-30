@@ -20,7 +20,7 @@ export default function DocumentScreen() {
         <Text style={styles.textStyle}>{decodedFilename}</Text>
       </View>
       <View style={styles.tableContainer}>
-        <TableComponent selectedSwar={selectedSwar} setSelectedSwar={setSelectedSwar} />
+        <TableComponent selectedSwar={selectedSwar} setSelectedSwar={setSelectedSwar}  />
       </View>
       <View style={styles.bottomContainer}>
         <Keyboard onSwarPress={handleSwarPress} />
