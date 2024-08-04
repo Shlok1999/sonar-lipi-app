@@ -6,11 +6,16 @@ import ViewShot from 'react-native-view-shot';
 import * as MediaLibrary from 'expo-media-library';
 import * as Sharing from 'expo-sharing';
 
-const TableComponent = ({ selectedSwar, setSelectedSwar, insertSeparator }) => {
-  const [tableData, setTableData] = useState([
-    ['Dha', 'Dhin','Dhin','Dha','Dha','Dhin','Dhin','Dha','Dha','Tin','Tin','Ta','Ta','Dhin','Dhin','Dha'],
-    // Add more initial data rows if needed
-  ]);
+const TableComponent = ({ selectedSwar, setSelectedSwar, insertSeparator, taal }) => {
+  const initialTableData = {
+    Tintaal: [['Dha','Dhin','Dhin','Dha','Dha',"Dhin",'Dhin',"Dha","Dha","Tin","Tin","Ta","Ta","Dhin","Dhin","Dha"]],
+    Jhaptaal: [['Dhi','Na','Ti','Na','Ti','Ti']],
+    Dadra: [['Dha','Dhi','Na','Dha','Ti','Na']],
+    Rupak: [['Ti','Ti','Na','Dhi','Na','Dhi']]
+  };
+
+  const [tableData, setTableData] = useState(initialTableData[taal] || []);
+
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [selectedCell, setSelectedCell] = useState({ rowIndex: null, colIndex: null });
   const doubleTapRef = useRef(null);
@@ -26,6 +31,9 @@ const TableComponent = ({ selectedSwar, setSelectedSwar, insertSeparator }) => {
     setSelectedCell({ rowIndex, colIndex });
   };
 
+  useEffect(()=>{
+    setTableData(initialTableData[taal] || []);
+  },[taal])
   useEffect(() => {
     if (selectedSwar && selectedCell.rowIndex !== null && selectedCell.colIndex !== null) {
       const newData = [...tableData];

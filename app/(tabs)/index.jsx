@@ -1,6 +1,7 @@
 import { Image, StyleSheet, Platform, Text, TouchableOpacity, View } from 'react-native';
 import { useState,useEffect } from 'react';
 import { Link } from 'expo-router';
+import Dashboard from './Dashboard';
 
 const SplashScreen = ()=>{
   return(
@@ -19,10 +20,7 @@ export default function HomeScreen() {
   // })
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Hello World</Text>
-      <Link href={'/Dashboard'}>Go to dashboard</Link>
-    </View>
+    <Dashboard/>
   );
 }
 

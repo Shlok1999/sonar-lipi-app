@@ -12,11 +12,9 @@ import {
 import { useRouter } from "expo-router";
 import { Picker } from '@react-native-picker/picker';
 import { Link } from "expo-router";
-import LinearGradient from 'react-native-linear-gradient';
-
 
 export default function Dashboard() {
-  const taals = ["Tintaal"];
+  const taals = ["Tintaal","Jhaptaal","Dadra","Rupak"];
 
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedTaal, setSelectedTaal] = useState('');

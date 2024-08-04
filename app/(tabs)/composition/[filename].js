@@ -6,12 +6,15 @@ import TableComponent from './TableComponent';
 
 export default function DocumentScreen() {
   const route = useRoute();
-  const { filename } = route.params;
-  const decodedFilename = decodeURIComponent(filename);
+  const { name, selectedTaal } = route.params || {}; // Ensure params are defined
+  const decodedFilename = decodeURIComponent(name || ""); // Handle undefined name
   const [selectedSwar, setSelectedSwar] = useState(null);
 
   const handleSwarPress = (swar) => {
     setSelectedSwar(swar);
+    if (swar == "X") {
+      // Handle backspace
+    }
   };
 
   return (
@@ -20,7 +23,7 @@ export default function DocumentScreen() {
         <Text style={styles.textStyle}>{decodedFilename}</Text>
       </View>
       <View style={styles.tableContainer}>
-        <TableComponent selectedSwar={selectedSwar} setSelectedSwar={setSelectedSwar}  />
+        <TableComponent selectedSwar={selectedSwar} setSelectedSwar={setSelectedSwar} taal={selectedTaal} />
       </View>
       <View style={styles.bottomContainer}>
         <Keyboard onSwarPress={handleSwarPress} />
